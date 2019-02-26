@@ -106,7 +106,7 @@ fi
 #mooc-project
 if [ ! -d "${ProjectDir}" ]; then
 mkdir ${ProjectDir}
-svn co --non-interactive --username ${svnUsername} --password ${svnPassword} https://store.apady.cn/svn/apady/apady/trunk ${ProjectDir}
+svn co --non-interactive --username ${svnUsername} --password ${svnPassword} https://store.apady.cn/svn/apady/ ${ProjectDir}
 chmod -R 755 ${ProjectDir}
 setenforce 0
 cd ${ProjectDir}
