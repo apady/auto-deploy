@@ -4,10 +4,17 @@ set -x -e
 BFS_ENV_DIR=/home
 BFS_STORAGE_DIR=/mnt/bfs
 ProjectDir=/var/www/html/apady
-svnUsername=#SvnUserName
-svnPassword=#SvnPassword
+
+#SvnUserName
+svnUsername=
+
+#SvnPassword
+svnPassword=
+
+#ServerDomainName
+serverName=
+
 phpcmd=/usr/bin/php
-serverName=#ServerDomainName
 
 #PHP 7.1
 if [[ -z `rpm -qa|grep php` ]];then
