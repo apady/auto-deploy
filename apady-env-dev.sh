@@ -17,7 +17,7 @@ yum -y install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php
 fi
 
 #Database
-if [[ -z `rpm -qa|grep mariadb` ]];then
+if [[ -z `rpm -qa|grep mariadb-server` ]];then
 yum -y install mariadb mariadb-server
 systemctl start mariadb
 systemctl enable mariadb
