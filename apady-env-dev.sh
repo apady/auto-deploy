@@ -16,11 +16,16 @@ serverName=
 
 phpcmd=/usr/bin/php
 
+#env
+yum -y install nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
+wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
+yum -y install yarn
+
 #PHP 7.1
 if [[ -z `rpm -qa|grep php` ]];then
 rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-yum -y install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php71w-gd
+yum -y install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php71w-gd php71w-pecl-redis
 fi
 
 #Database
@@ -42,14 +47,12 @@ grant all on mooc.* to apady;
 flush privileges;
 quit"
 
-#env
-yum -y install nodejs wget unzip git svn zlib-devel  psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
-wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
-yum -y install yarn
 
-#Apache
+#Apache Redis
 systemctl enable httpd
+systemctl enable redis
 systemctl start httpd
+systemctl start redis
 
 #libfuse
 if [[ ! -d ${BFS_ENV_DIR}/fuse ]]; then
