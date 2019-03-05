@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x -e
 
 BFS_ENV_DIR=/home
 BFS_STORAGE_DIR=/mnt/bfs
