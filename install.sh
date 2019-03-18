@@ -1,24 +1,34 @@
 #!/usr/bin/env bash
+set -x 
+if [[ -z `which jq` ]]; then
+  yum -y install jq
+fi
 
-BFS_ENV_DIR=/home
-BFS_STORAGE_DIR=/mnt/bfs
-ProjectDir=/var/www/html/apady
 
 #SvnUserName
-svnUsername=
+svnUsername=`cat config.json| jq -r '.svnUsername'`
 
 #SvnPassword
-svnPassword=
+svnPassword=`cat config.json| jq -r '.svnPassword'`
 
 #ServerDomainName
-serverName=
+serverName=`cat config.json| jq -r '.serverName'`
+
+BFS_ENV_DIR=`cat config.json| jq -r '.BFS_ENV_DIR'`
+BFS_STORAGE_DIR=`cat config.json| jq -r '.BFS_STORAGE_DIR'`
+ProjectDir=`cat config.json| jq -r '.ProjectDir'`
+
+DBName=`cat config.json| jq -r '.DBName'`
+DBUser=`cat config.json| jq -r '.DBUser'`
+DBRootPassword=`cat config.json| jq -r '.DBRootPassword'`
+DBPassword=`cat config.json| jq -r '.DBPassword'`
+
 
 phpcmd=/usr/bin/php
 
 #env
-rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-yum -y install nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
+yum -y install epel-release nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
 wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
 yum -y install yarn
 
@@ -35,15 +45,15 @@ systemctl start mariadb
 systemctl enable mariadb
 mysql -s -e "
 use mysql
-update user set password=password('Apady2018') where user='root';
+update user set password=password('${DBRootPassword}') where user='root';
 flush privileges;
 quit"
 fi
 
-mysql -uroot -pApady2018 -s -e "
-create database IF NOT EXISTS mooc;
-grant all on mooc.* to apady@localhost identified by 'Apady2018';
-grant all on mooc.* to apady;
+mysql -uroot -p${DBRootPassword} -s -e "
+create database IF NOT EXISTS ${DBName};
+grant all on ${DBName}.* to ${DBUser}@localhost identified by '${DBPassword}';
+grant all on ${DBName}.* to ${DBUser};
 flush privileges;
 quit"
 
@@ -108,19 +118,21 @@ fi
 
 #mooc-project
 if [ ! -d "${ProjectDir}" ]; then
-mkdir ${ProjectDir}
-svn co --non-interactive --username ${svnUsername} --password ${svnPassword} https://store.apady.cn/svn/apady/ ${ProjectDir}
-chmod -R 755 ${ProjectDir}
-setenforce 0
-cd ${ProjectDir}
-composer install
-yarn install
-$phpcmd bin/console make:migration -n
-$phpcmd bin/console doctrine:schema:drop --force 
-$phpcmd bin/console doctrine:migrations:migrate -n
-yarn encore dev 
-chown -R apache:apache ${ProjectDir}
-chown -R apache:apache /var/lib/php/session/ 
+  mkdir ${ProjectDir}
+  svn co --non-interactive --username ${svnUsername} --password ${svnPassword} https://store.apady.cn/svn/apady/ ${ProjectDir}
+  chmod -R 755 ${ProjectDir}
+  if [[ `getenforce` = "Enforcing" ]];then
+    setenforce 0
+  fi
+  cd ${ProjectDir}
+  composer install
+  yarn install
+  $phpcmd bin/console make:migration -n
+  $phpcmd bin/console doctrine:schema:drop --force 
+  $phpcmd bin/console doctrine:migrations:migrate -n
+  yarn encore dev 
+  chown -R apache:apache ${ProjectDir}
+  chown -R apache:apache /var/lib/php/session/ 
 fi
 
 #VHost 

@@ -1,0 +1,12 @@
+{
+	"svnUsername":"",
+	"svnPassword":"",
+	"serverName":"",
+	"BFS_ENV_DIR":"/home",
+	"BFS_STORAGE_DIR":"/mnt/bfs",
+	"ProjectDir":"",
+	"DBName":"",
+	"DBUser":"",
+	"DBRootPassword":"",
+	"DBPassword":""
+}
