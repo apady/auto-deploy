@@ -1,13 +1,14 @@
 # Apady env auto deploy script
-## 使用方法
+## 配置
 
-1.下载脚本后，切换至root用户，并赋予脚本执行权限 `chmod u+x install.sh`
+1.赋予脚本执行权限 `chmod u+x apady_env`
 
 2.修改config.json填写相关参数
 ```json
 {
 	"svnUsername":"",
 	"svnPassword":"",
+	"svnRepoURL":"",
 	"serverName":"",
 	"BFS_ENV_DIR":"/home",
 	"BFS_STORAGE_DIR":"/mnt/bfs",
@@ -18,7 +19,13 @@
 	"DBPassword":""
 }
 ```
+## 使用方法
+1. 安装开发环境 `./apady_env install`
 
-3.执行脚本 `./install.sh`
+2. 修复环境    `./apady_env repair`
+
+3. 卸载       `./apady_env clean`
+
+
 
 
