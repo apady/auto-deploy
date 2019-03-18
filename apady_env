@@ -1,17 +1,33 @@
 #!/usr/bin/env bash
-set -x 
+ set -x 
+
+if [ "$1"x = "repair"x ]; then
+  bash ./clean.sh
+elif [ "$1"x = "clean"x ]; then
+  bash ./clean.sh all
+  exit
+else
+  echo "
+  Welcome to use Apady auto deploy script @author lishen chen 
+
+  @email frankchenls@outlook.com
+
+  Usage: apady_env COMMAND
+
+  List of Commands:
+  install  Install apady development environment.
+  repair   Clean project source code and reinstall the environment.
+  clean    Clean all development environment."
+  exit
+fi
+
 if [[ -z `which jq` ]]; then
   yum -y install jq
 fi
 
-
-#SvnUserName
 svnUsername=`cat config.json| jq -r '.svnUsername'`
-
-#SvnPassword
 svnPassword=`cat config.json| jq -r '.svnPassword'`
-
-#ServerDomainName
+svnRepoURL=`cat config.json| jq -r '.svnRepoURL'`
 serverName=`cat config.json| jq -r '.serverName'`
 
 BFS_ENV_DIR=`cat config.json| jq -r '.BFS_ENV_DIR'`
@@ -23,39 +39,40 @@ DBUser=`cat config.json| jq -r '.DBUser'`
 DBRootPassword=`cat config.json| jq -r '.DBRootPassword'`
 DBPassword=`cat config.json| jq -r '.DBPassword'`
 
-
 phpcmd=/usr/bin/php
 
 #env
-rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-yum -y install epel-release nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
-wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
-yum -y install yarn
-
-#PHP 7.1
-if [[ -z `rpm -qa|grep php` ]];then
-
-yum -y install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php71w-gd php71w-pecl-redis
+if [ "$1"x="install"x ];then
+  rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+  yum -y install epel-release nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
+  wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
+  yum -y install yarn
+  #PHP 7.1
+  if [[ -z `rpm -qa|grep php` ]];then
+    yum -y install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php71w-gd php71w-pecl-redis
+  fi
+  #Database
+  if [[ -z `rpm -qa|grep mariadb-server` ]];then
+    yum -y install mariadb mariadb-server
+    systemctl start mariadb
+    systemctl enable mariadb
+    mysql -s -e "
+    use mysql
+    update user set password=password('${DBRootPassword}') where user='root';
+    flush privileges;
+    quit"
+  fi
 fi
 
-#Database
-if [[ -z `rpm -qa|grep mariadb-server` ]];then
-yum -y install mariadb mariadb-server
-systemctl start mariadb
-systemctl enable mariadb
-mysql -s -e "
-use mysql
-update user set password=password('${DBRootPassword}') where user='root';
-flush privileges;
-quit"
-fi
 
-mysql -uroot -p${DBRootPassword} -s -e "
-create database IF NOT EXISTS ${DBName};
-grant all on ${DBName}.* to ${DBUser}@localhost identified by '${DBPassword}';
-grant all on ${DBName}.* to ${DBUser};
-flush privileges;
-quit"
+if [ "$1"x="install"x || "$1"x="repair" ];then
+  mysql -uroot -p${DBRootPassword} -s -e "
+  create database IF NOT EXISTS ${DBName};
+  grant all on ${DBName}.* to ${DBUser}@localhost identified by '${DBPassword}';
+  grant all on ${DBName}.* to ${DBUser};
+  flush privileges;
+  quit"
+fi
 
 
 #Apache Redis
@@ -119,7 +136,7 @@ fi
 #mooc-project
 if [ ! -d "${ProjectDir}" ]; then
   mkdir ${ProjectDir}
-  svn co --non-interactive --username ${svnUsername} --password ${svnPassword} https://store.apady.cn/svn/apady/ ${ProjectDir}
+  svn co --non-interactive --username ${svnUsername} --password ${svnPassword} ${svnRepoURL}/${ProjectDir}
   chmod -R 755 ${ProjectDir}
   if [[ `getenforce` = "Enforcing" ]];then
     setenforce 0
@@ -161,11 +178,13 @@ echo "<VirtualHost *:80>
 fi
 
 #Firewall
-firewall-cmd --zone=public --add-port=80/tcp --permanent
-firewall-cmd --zone=public --add-port=443/tcp --permanent
-firewall-cmd --zone=public --add-port=3306/tcp --permanent
-firewall-cmd --zone=public --add-port=8827/tcp --permanent
-firewall-cmd --reload
+if [ `firewall-cmd --state` = "running" ]; then
+  firewall-cmd --zone=public --add-port=80/tcp --permanent
+  firewall-cmd --zone=public --add-port=443/tcp --permanent
+  firewall-cmd --zone=public --add-port=3306/tcp --permanent
+  firewall-cmd --zone=public --add-port=8827/tcp --permanent
+  firewall-cmd --reload
+fi
 
 systemctl restart httpd
 echo "Done"

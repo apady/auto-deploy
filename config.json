@@ -1,12 +1,13 @@
 {
 	"svnUsername":"",
 	"svnPassword":"",
+	"svnRepoURL":"",
 	"serverName":"",
 	"BFS_ENV_DIR":"/home",
 	"BFS_STORAGE_DIR":"/mnt/bfs",
 	"ProjectDir":"",
-	"DBName":"",
-	"DBUser":"",
-	"DBRootPassword":"",
-	"DBPassword":""
+	"DBName":"mooc",
+	"DBUser":"apady",
+	"DBRootPassword":"Apady2018",
+	"DBPassword":"Apady2018"
 }
