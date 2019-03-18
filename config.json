@@ -6,8 +6,8 @@
 	"BFS_ENV_DIR":"/home",
 	"BFS_STORAGE_DIR":"/mnt/bfs",
 	"ProjectDir":"",
-	"DBName":"mooc",
-	"DBUser":"apady",
-	"DBRootPassword":"Apady2018",
-	"DBPassword":"Apady2018"
+	"DBName":"",
+	"DBUser":"",
+	"DBRootPassword":"",
+	"DBPassword":""
 }
