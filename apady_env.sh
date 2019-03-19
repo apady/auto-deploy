@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-WORK_DIR=`pwd`
+WORK_DIR=/usr/bin
 
 case "$1"x in
   "install"x )
