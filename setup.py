@@ -74,7 +74,7 @@ def reconfig():
 
 	DBRootPassword =  getpass.getpass("Root password for your database:")
 	if DBRootPassword: config['DBRootPassword'] = DBRootPassword
-	
+
 	ProjectDir =  raw_input("Please input project directory path(%s):" % (config['ProjectDir']))
 	if  ProjectDir: config['ProjectDir'] = ProjectDir 
 	
@@ -124,10 +124,12 @@ def uninstall():
 if __name__ == '__main__':
 	if not os.path.isfile('./config.json'):
 		config_data=config()
+		store(config_data)
+		install()
 	else:
 		config_data= reconfig()
-	store(config_data)
-	install()
+		store(config_data)
+	
 
 
 
