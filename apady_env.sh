@@ -10,13 +10,13 @@ case "$1"x in
     cd -
     ;;
   "repair"x )
-    cd ${WORK_DIR}apady_envd
+    cd ${WORK_DIR}/apady_envd
     bash ./clean.sh 
     bash ./deploy.sh
     cd -
     ;;
   "clean"x )
-    cd ${WORK_DIR}apady_envd
+    cd ${WORK_DIR}/apady_envd
     bash ./clean.sh all
     cd -
     ;;
