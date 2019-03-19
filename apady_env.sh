@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
+
+WORK_DIR=`pwd`
+
 case "$1"x in
   "install"x )
-    cd apady_envd
+    cd ${WORK_DIR}/apady_envd
     bash ./env_install.sh
     bash ./deploy.sh
     cd -
     ;;
   "repair"x )
-    cd apady_envd
+    cd ${WORK_DIR}apady_envd
     bash ./clean.sh 
     bash ./deploy.sh
     cd -
     ;;
   "clean"x )
-    cd apady_envd
+    cd ${WORK_DIR}apady_envd
     bash ./clean.sh all
     cd -
     ;;
