@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 case "$1"x in
   "install"x )
     cd apady_envd

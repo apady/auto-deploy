@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding=utf-8   
-import os,shutil
+import os,shutil,sys
 import json
 import getpass
 
-INSTALL_DIR = '/usr/local/bin/'	
+INSTALL_DIR = '/usr/bin/'	
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 deploy_dir = os.path.join(INSTALL_DIR,'apady_envd')
 
@@ -12,8 +12,14 @@ deploy_dir = os.path.join(INSTALL_DIR,'apady_envd')
 def store(data):
     with open('config.json', 'w') as json_file:
         json_file.write(json.dumps(data,sort_keys=True, indent=4, separators=(',', ': ')))
+def load():
+    with open(os.path.join(deploy_dir,'config.json')) as json_file:
+        data = json.load(json_file)
+        return data
 
 def config():
+	if  os.path.isfile('./config.json'):
+		config_data = load()
 	svnRepoURL =  raw_input("Please input SVN repository URL:")
 	svnUsername =  raw_input("Please input SVN user name:")
 	svnPassword =  getpass.getpass("Please input SVN password:")
@@ -54,6 +60,7 @@ def install():
 	shutil.copy(os.path.join(BASE_DIR,'deploy.sh'), os.path.join(deploy_dir,'deploy.sh'))
 	shutil.copy(os.path.join(BASE_DIR,'config.json'), os.path.join(deploy_dir,'config.json'))
 	shutil.copy(os.path.join(BASE_DIR,'setup.py'), os.path.join(deploy_dir,'setup.py'))
+	os.chmod(os.path.join(INSTALL_DIR,'apady_env'),stat.S_IXOTH) 
 
 
 def uninstall():
@@ -78,6 +85,7 @@ def uninstall():
 
  
 if __name__ == '__main__':
+	opt = sys.argv[1]
 	if not os.path.isfile('./config.json'):
 		config_data=config()
 		store(config_data)

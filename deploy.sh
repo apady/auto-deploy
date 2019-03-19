@@ -23,14 +23,13 @@ phpcmd=/usr/bin/php
 
 
 
-if [ "$1"x="install"x || "$1"x="repair" ];then
-  mysql -uroot -p${DBRootPassword} -s -e "
-  create database IF NOT EXISTS ${DBName};
-  grant all on ${DBName}.* to ${DBUser}@localhost identified by '${DBPassword}';
-  grant all on ${DBName}.* to ${DBUser};
-  flush privileges;
-  quit"
-fi
+mysql -uroot -p${DBRootPassword} -s -e "
+create database IF NOT EXISTS ${DBName};
+grant all on ${DBName}.* to ${DBUser}@localhost identified by '${DBPassword}';
+grant all on ${DBName}.* to ${DBUser};
+flush privileges;
+quit"
+
 
 
 #Apache Redis
@@ -94,7 +93,7 @@ fi
 #mooc-project
 if [ ! -d "${ProjectDir}" ]; then
   mkdir ${ProjectDir}
-  svn co --non-interactive --username ${svnUsername} --password ${svnPassword} ${svnRepoURL}/${ProjectDir}
+  svn co --non-interactive --username ${svnUsername} --password ${svnPassword} ${svnRepoURL} ${ProjectDir}
   chmod -R 755 ${ProjectDir}
   if [[ `getenforce` = "Enforcing" ]];then
     setenforce 0
