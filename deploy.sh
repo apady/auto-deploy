@@ -1,25 +1,4 @@
 #!/usr/bin/env bash
- set -x 
-
-if [ "$1"x = "repair"x ]; then
-  bash ./clean.sh
-elif [ "$1"x = "clean"x ]; then
-  bash ./clean.sh all
-  exit
-else
-  echo "
-  Welcome to use Apady auto deploy script @author lishen chen 
-
-  @email frankchenls@outlook.com
-
-  Usage: apady_env COMMAND
-
-  List of Commands:
-  install  Install apady development environment.
-  repair   Clean project source code and reinstall the environment.
-  clean    Clean all development environment."
-  exit
-fi
 
 if [[ -z `which jq` ]]; then
   yum -y install jq
@@ -41,28 +20,7 @@ DBPassword=`cat config.json| jq -r '.DBPassword'`
 
 phpcmd=/usr/bin/php
 
-#env
-if [ "$1"x="install"x ];then
-  rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-  yum -y install epel-release nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
-  wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
-  yum -y install yarn
-  #PHP 7.1
-  if [[ -z `rpm -qa|grep php` ]];then
-    yum -y install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php71w-gd php71w-pecl-redis
-  fi
-  #Database
-  if [[ -z `rpm -qa|grep mariadb-server` ]];then
-    yum -y install mariadb mariadb-server
-    systemctl start mariadb
-    systemctl enable mariadb
-    mysql -s -e "
-    use mysql
-    update user set password=password('${DBRootPassword}') where user='root';
-    flush privileges;
-    quit"
-  fi
-fi
+
 
 
 if [ "$1"x="install"x || "$1"x="repair" ];then
