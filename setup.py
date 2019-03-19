@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding=utf-8   
-import os,shutil,sys
+import os,shutil,sys,stat
 import json
 import getpass
 
