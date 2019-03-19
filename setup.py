@@ -10,7 +10,7 @@ deploy_dir = os.path.join(INSTALL_DIR,'apady_envd')
 
 
 def store(data):
-    with open('config.json', 'w') as json_file:
+    with open(os.path.join(BASE_DIR,'config.json'), 'w') as json_file:
         json_file.write(json.dumps(data,sort_keys=True, indent=4, separators=(',', ': ')))
 def load():
     with open(os.path.join(deploy_dir,'config.json')) as json_file:
@@ -49,8 +49,9 @@ def config():
 	"DBPassword":DBPassword}
 	return config_data
 def reconfig():
-	if  os.path.isfile('./config.json'):
-		config = load()
+	
+	config = load()
+
 	svnRepoURL =  raw_input("Please input SVN repository URL(%s):" % (config['svnRepoURL']))
 	if svnRepoURL:  config['svnRepoURL'] = svnRepoURL 
 
