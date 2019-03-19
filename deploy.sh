@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+set -x -e
 if [[ -z `which jq` ]]; then
   yum -y install jq
 fi
@@ -135,7 +136,7 @@ echo "<VirtualHost *:80>
 fi
 
 #Firewall
-if [ `firewall-cmd --state` = "running" ]; then
+if [ `firewall-cmd --state` == "running" ]; then
   firewall-cmd --zone=public --add-port=80/tcp --permanent
   firewall-cmd --zone=public --add-port=443/tcp --permanent
   firewall-cmd --zone=public --add-port=3306/tcp --permanent

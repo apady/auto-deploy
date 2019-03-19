@@ -18,8 +18,7 @@ def load():
         return data
 
 def config():
-	if  os.path.isfile('./config.json'):
-		config_data = load()
+	
 	svnRepoURL =  raw_input("Please input SVN repository URL:")
 	svnUsername =  raw_input("Please input SVN user name:")
 	svnPassword =  getpass.getpass("Please input SVN password:")
@@ -49,6 +48,44 @@ def config():
 	"DBRootPassword":DBRootPassword,
 	"DBPassword":DBPassword}
 	return config_data
+def reconfig():
+	if  os.path.isfile('./config.json'):
+		config = load()
+	svnRepoURL =  raw_input("Please input SVN repository URL(%s):" % (config['svnRepoURL']))
+	if svnRepoURL:  config['svnRepoURL'] = svnRepoURL 
+
+	svnUsername =  raw_input("Please input SVN user name(%s):" % (config['svnUsername']))
+	if svnUsername: config['svnUsername'] = svnUsername 
+
+	svnPassword =  getpass.getpass("Please input SVN password:")
+	if svnPassword: config['svnPassword'] = svnPassword
+
+	serverName =  raw_input("Please input server domain name(%s):" % (config['serverName']))
+	if serverName: config['serverName'] = serverName 
+
+	DBName =  raw_input("Database name(%s):" % (config['DBName']))
+	if  DBName: config['DBName'] = DBName 
+
+	DBUser =  raw_input("Database user(%s):" % (config['DBUser']))
+	if  DBUser: config['DBUser'] = DBUser 
+
+	DBPassword =  getpass.getpass("User password for database:")
+	if DBPassword: config['DBPassword'] = DBPassword
+
+	DBRootPassword =  getpass.getpass("Root password for your database:")
+	if DBRootPassword: config['DBRootPassword'] = DBRootPassword
+	
+	ProjectDir =  raw_input("Please input project directory path(%s):" % (config['ProjectDir']))
+	if  ProjectDir: config['ProjectDir'] = ProjectDir 
+	
+	BFS_ENV_DIR =  raw_input("Directory path for Baidu File System(%s):" % (config['BFS_ENV_DIR']))
+	if  BFS_ENV_DIR:  config['BFS_ENV_DIR'] = BFS_ENV_DIR 
+	
+	BFS_STORAGE_DIR = raw_input("Directory path for BFS storage(%s):" % (config['BFS_STORAGE_DIR']))
+	if  BFS_STORAGE_DIR: config['BFS_STORAGE_DIR'] = BFS_STORAGE_DIR 
+
+	return config
+
 def install():
 	
 	uninstall()
@@ -85,10 +122,11 @@ def uninstall():
 
  
 if __name__ == '__main__':
-	opt = sys.argv[1]
 	if not os.path.isfile('./config.json'):
 		config_data=config()
-		store(config_data)
+	else:
+		config_data= reconfig()
+	store(config_data)
 	install()
 
 
