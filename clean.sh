@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x -e
+set -x 
 if [[ -z `which jq` ]]; then
   yum -y install jq
 fi
