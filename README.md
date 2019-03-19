@@ -9,7 +9,7 @@ python setup.py
 ## 使用方法
 1. 部署开发环境 
 ```
-apady_env install
+apady_env deploy
 ```
 
 2. 修复环境    
