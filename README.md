@@ -2,6 +2,10 @@
 ======
 
 apadyevn is a linux command-line environment deployment tool designed for the apady MOOC project.
+### Compatibility
+ 
+        
+   **CentOS 7** minimal install only!
 
 ## Installation
 
@@ -49,7 +53,7 @@ apady_env clean
 
 Run the following python script to uninstall
 ```
-python setup.py uninstall
+sudo python setup.py uninstall
 ```
 
 
