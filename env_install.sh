@@ -2,6 +2,12 @@
 
 # Database
 set -x
+if [[ -z `which jq` ]]; then
+  yum -y install jq
+fi
+
+DBRootPassword=`cat config.json| jq -r '.DBRootPassword'`
+
 if [[ -z ` which mysql ` ]];then
   yum -y install mariadb mariadb-server
   systemctl start mariadb
