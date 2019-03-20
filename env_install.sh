@@ -2,6 +2,10 @@
 
 # Database
 set -x
+
+rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+
 if [[ -z `which jq` ]]; then
   yum -y install jq
 fi
@@ -23,9 +27,7 @@ if [ "$1"x == "deploy"x ];then
   yum -y remove php*
   yum -y remove httpd* 
 fi
-rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-yum makecache
+
 yum  --enablerepo=epel -y install nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
 wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
 yum -y install yarn
