@@ -112,7 +112,7 @@ def uninstall():
     shutil.rmtree(deploy_dir)
 
     if os.path.isfile(os.path.join(INSTALL_DIR,'apady_env')):
-	os.remove(os.path.join(INSTALL_DIR,'apady_env'))
+    	os.remove(os.path.join(INSTALL_DIR,'apady_env'))
 	
 
  
