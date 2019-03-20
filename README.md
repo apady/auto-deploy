@@ -1,4 +1,4 @@
-[Apady env auto deploy tool](https://github.com/apady/auto-deploy)
+[Apady environment auto deploy tool](https://github.com/apady/auto-deploy)
 ======
 
 apadyevn is a linux command-line environment deployment tool designed for the apady MOOC project.
