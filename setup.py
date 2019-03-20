@@ -87,6 +87,10 @@ def reconfig():
 
 	return config
 
+def clear_config():
+	if os.path.isfile('./config.json'):
+		os.remove('./config.json')
+
 def install():
 	
 	uninstall()
@@ -127,6 +131,7 @@ if __name__ == '__main__':
 		if sys.argv[1] == 'install':
 			install()
 		elif sys.argv[1] == 'uninstall':
+			clear_config()
 			uninstall()
 	else:
 		if not os.path.isfile('./config.json'):
