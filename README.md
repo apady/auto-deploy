@@ -15,7 +15,7 @@ sudo python setup.py
 ```
 After configuring all the prerequisite parameters, try to run `apady_env`. When seeing this, it's done!
 ```
- Welcome to use Apady auto deploy script @author lishen chen 
+ Welcome to use Apady auto deploy tool @author lishen chen 
 
       @email frankchenls@outlook.com
 
@@ -40,18 +40,18 @@ apady_env deploy
 ```
 apady_env repair
 ```
-3.Configure prerequisite parameters used in the program
+3. Configure prerequisite parameters used in the program
 ```
 apady_env config
 ```
 
-4. Clean all development environment.
+4. Clean all the development environment.
 ```
 apady_env clean
 ```
 ## Uninstallation
 
-Run the following python script to uninstall
+Run the following command to uninstall
 ```
 sudo python setup.py uninstall
 ```
