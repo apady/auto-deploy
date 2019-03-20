@@ -49,7 +49,7 @@ def config():
 	"DBPassword":DBPassword}
 	return config_data
 def reconfig():
-	
+
 	config = load()
 
 	svnRepoURL =  raw_input("Please input SVN repository URL(%s):" % (config['svnRepoURL']))
@@ -123,13 +123,21 @@ def uninstall():
 
  
 if __name__ == '__main__':
-	if not os.path.isfile('./config.json'):
-		config_data=config()
-		store(config_data)
-		install()
+	if len(sys.argv) > 1 :
+		if sys.argv[1] == 'install':
+			install()
+		elif sys.argv[1] == 'uninstall':
+			uninstall()
 	else:
-		config_data= reconfig()
-		store(config_data)
+		if not os.path.isfile('./config.json'):
+			config_data=config()
+			store(config_data)
+			install()
+		else:
+			config_data= reconfig()
+			store(config_data)
+
+
 	
 
 
