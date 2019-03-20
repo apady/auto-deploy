@@ -30,7 +30,11 @@ apady_env config
 ```
 apady_env clean
 ```
+## Uninstallation
 
-
+Run the following python script to uninstall
+```
+python setup.py uninstall
+```
 
 
