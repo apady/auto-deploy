@@ -33,7 +33,7 @@ case "$1"x in
     ;;
   *)
     echo "
-      Welcome to use Apady auto deploy script @author lishen chen 
+      Welcome to use Apady auto deploy tool @author lishen chen 
 
       @email frankchenls@outlook.com
 
@@ -43,7 +43,7 @@ case "$1"x in
       deploy   Deploy apady development environment.
       repair   Clean project source code and reinstall the environment.
       config   Configure  prerequisite parameters used in the program.  
-      clean    Clean all development environment."
+      clean    Clean all the development environment."
   ;;
 esac
 
