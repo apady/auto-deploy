@@ -13,7 +13,7 @@ Run the following python script to install
 ```
 sudo python setup.py
 ```
-After configuring all the prerequisite parameters, try to run `apady_evn`. When seeing this, it's done!
+After configuring all the prerequisite parameters, try to run `apady_env`. When seeing this, it's done!
 ```
  Welcome to use Apady auto deploy script @author lishen chen 
 
