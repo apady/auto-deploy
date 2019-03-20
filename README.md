@@ -1,23 +1,32 @@
-# Apady env auto deploy program
-## 安装
+[Apady env auto deploy tool](https://github.com/apady/auto-deploy)
+======
 
+apadyevn is a linux command-line environment deployment tool designed for the apady MOOC project.
+
+## Installation
+
+Run the following python script to install
 ```
 python setup.py
 ```
 
 
-## 使用方法
-1. 部署开发环境 
+## Usage
+1. Deploy apady development environment.
 ```
 apady_env deploy
 ```
 
-2. 修复环境    
+2. Clean project source code and reinstall the environment.
 ```
 apady_env repair
 ```
+3.Configure prerequisite parameters used in the program
+```
+apady_env config
+```
 
-3. 卸载       
+4. Clean all development environment.
 ```
 apady_env clean
 ```
