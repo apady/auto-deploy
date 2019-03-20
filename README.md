@@ -7,12 +7,27 @@ apadyevn is a linux command-line environment deployment tool designed for the ap
 
 Run the following python script to install
 ```
-python setup.py
+sudo python setup.py
+```
+After configuring all the prerequisite parameters, try to run `apady_evn`. When seeing this, it's done!
+```
+ Welcome to use Apady auto deploy script @author lishen chen 
+
+      @email frankchenls@outlook.com
+
+      Usage: apady_env COMMAND
+
+      List of Commands:
+      deploy   Deploy apady development environment.
+      repair   Clean project source code and reinstall the environment.
+      config   Configure  prerequisite parameters used in the program.  
+      clean    Clean all development environment."
 ```
 
-
 ## Usage
+
 1. Deploy apady development environment.
+
 ```
 apady_env deploy
 ```
