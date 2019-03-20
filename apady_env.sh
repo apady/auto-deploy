@@ -5,7 +5,7 @@ WORK_DIR=/usr/bin
 case "$1"x in
   "deploy"x )
     cd ${WORK_DIR}/apady_envd
-    bash ./env_install.sh
+    bash ./env_install.sh deploy
     bash ./deploy.sh
     cd -
     ;;

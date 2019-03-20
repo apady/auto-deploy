@@ -109,17 +109,7 @@ def uninstall():
 
     if not os.path.isdir(deploy_dir):
     	return
-    files = os.listdir(deploy_dir)
-    try:
-        for file in files:
-            filePath=os.path.join(deploy_dir,file)
-            if os.path.isfile(filePath):
-                os.remove(filePath)
-            elif os.path.isdir(filePath):
-                removeDir(filePath)
-        os.rmdir(deploy_dir)
-    except Exception,e:
-    	print e
+    shutil.rmtree(deploy_dir)
 
     if os.path.isfile(os.path.join(INSTALL_DIR,'apady_env')):
 		os.remove(os.path.join(INSTALL_DIR,'apady_env'))

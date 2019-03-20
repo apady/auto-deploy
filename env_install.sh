@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-set -x -e
-# Database
 
-if [[ -z ` rpm -qa | grep mariadb-server ` ]];then
+# Database
+set -x
+if [[ -z ` which mysql ` ]];then
   yum -y install mariadb mariadb-server
   systemctl start mariadb
   systemctl enable mariadb
@@ -13,10 +13,16 @@ if [[ -z ` rpm -qa | grep mariadb-server ` ]];then
   quit"
 fi
 
+if [ "$1"x == "deploy"x ];then
+  yum -y remove php*
+  yum -y remove httpd* 
+fi
+rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-yum -y install epel-release nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
+yum makecache
+yum  --enablerepo=epel -y install nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
 wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
 yum -y install yarn
 #PHP 7.1
-yum -y install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php71w-gd php71w-pecl-redis
+yum -y --enablerepo=epel install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php71w-gd php71w-pecl-redis
   
