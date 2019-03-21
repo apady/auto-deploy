@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-if [[ -z `which jq` ]]; then
-  yum -y install jq
-fi
 
 svnUsername=`cat config.json| jq -r '.svnUsername'`
 svnPassword=`cat config.json| jq -r '.svnPassword'`

@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-if [[ -z `which jq` ]]; then
-  yum -y install jq
-fi
 
 BFS_ENV_DIR=`cat config.json| jq -r '.BFS_ENV_DIR'`
 BFS_STORAGE_DIR=`cat config.json| jq -r '.BFS_STORAGE_DIR'`
@@ -12,7 +9,7 @@ DBUser=`cat config.json| jq -r '.DBUser'`
 DBPassword=`cat config.json| jq -r '.DBPassword'`
 
 if [ "$1"x = "all"x ]; then
-	if [[ -z `ps -fe|grep bfs_mount|grep -v grep` ]];then
+	if [[ -n `ps -fe|grep bfs_mount|grep -v grep` ]];then
 		umount ${BFS_STORAGE_DIR}
 	fi
 	rm -rf ${BFS_ENV_DIR}/bfs
