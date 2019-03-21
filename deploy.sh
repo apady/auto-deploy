@@ -96,7 +96,7 @@ if [ ! -d "${ProjectDir}" ]; then
   if [ ! -d "${ProjectDir}" ]; then
     echo 'Fail to checkout source code'
     echo 'Run apady_env config to check SVN parameters'
-    exit(1)
+    exit 1
   fi
   chmod -R 755 ${ProjectDir}
   if [[ `getenforce` = "Enforcing" ]];then
