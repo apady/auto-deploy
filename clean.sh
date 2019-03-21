@@ -30,3 +30,12 @@ else
 	drop database ${DBName} ;
 	quit"
 fi
+
+#Firewall
+if [ `firewall-cmd --state` == "running" ]; then
+  firewall-cmd --zone=public --remove-port=80/tcp --permanent
+  firewall-cmd --zone=public --remove-port=443/tcp --permanent
+  firewall-cmd --zone=public --remove-port=3306/tcp --permanent
+  firewall-cmd --zone=public --remove-port=8827/tcp --permanent
+  firewall-cmd --reload
+fi

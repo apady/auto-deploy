@@ -93,6 +93,11 @@ fi
 if [ ! -d "${ProjectDir}" ]; then
   mkdir ${ProjectDir}
   svn co --non-interactive --username ${svnUsername} --password ${svnPassword} ${svnRepoURL} ${ProjectDir}
+  if [ ! -d "${ProjectDir}" ]; then
+    echo 'Fail to checkout source code'
+    echo 'Run apady_env config to check SVN parameters'
+    exit(1)
+  fi
   chmod -R 755 ${ProjectDir}
   if [[ `getenforce` = "Enforcing" ]];then
     setenforce 0
