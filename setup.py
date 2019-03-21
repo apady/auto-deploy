@@ -130,6 +130,7 @@ if __name__ == '__main__':
 			config_data=config()
 			store(config_data)
 			install()
+			print('Successfully installed.')
 		else:
 			config_data= reconfig()
 			store(config_data)
