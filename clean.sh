@@ -12,6 +12,9 @@ DBUser=`cat config.json| jq -r '.DBUser'`
 DBPassword=`cat config.json| jq -r '.DBPassword'`
 
 if [ "$1"x = "all"x ]; then
+	if [[ -z `ps -fe|grep bfs_mount|grep -v grep` ]];then
+		umount ${BFS_STORAGE_DIR}
+	fi
 	rm -rf ${BFS_ENV_DIR}/bfs
 	rm -rf ${BFS_STORAGE_DIR}
 	#Firewall
