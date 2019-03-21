@@ -54,7 +54,7 @@ fi
 #BFS
 if [[ ! -d ${BFS_ENV_DIR}/bfs ]]; then
   cd ${BFS_ENV_DIR}
-  git clone https://github.com/apady/bfs.git
+  git clone  —-depth=1 https://github.com/apady/bfs.git
   cd bfs 
   sed -i '4a FUSE_PATH=${BFS_ENV_DIR}/fuse/include' Makefile
   ./build.sh
@@ -65,7 +65,7 @@ fi
 #BFS-PHP-SDK
 if [[ ! -d ${BFS_ENV_DIR}/bfs-php-extension ]]; then
   cd ${BFS_ENV_DIR}
-  git clone https://github.com/apady/bfs-php-extension.git
+  git clone —-depth=1 https://github.com/apady/bfs-php-extension.git
   cd bfs-php-extension
   chmod 755 build.sh
   ./build.sh
