@@ -40,54 +40,53 @@ systemctl start redis
 
 #libfuse
 if [[ ! -d ${BFS_ENV_DIR}/fuse ]]; then
-cd ${BFS_ENV_DIR}
-wget https://github.com/libfuse/libfuse/archive/fuse-2.9.8.zip
-unzip fuse-2.9.8.zip
-mv libfuse-fuse-2.9.8 fuse
-cd fuse
-./makeconf.sh
-./configure
-make && make install
-cd ..
+  cd ${BFS_ENV_DIR}
+  wget https://github.com/libfuse/libfuse/archive/fuse-2.9.8.zip
+  unzip fuse-2.9.8.zip
+  mv libfuse-fuse-2.9.8 fuse
+  cd fuse
+  ./makeconf.sh
+  ./configure
+  make && make install
+  cd ..
 fi
 
 #BFS
 if [[ ! -d ${BFS_ENV_DIR}/bfs ]]; then
-cd ${BFS_ENV_DIR}
-git clone https://github.com/apady/bfs.git
-cd bfs 
-sed -i '4a FUSE_PATH=${BFS_ENV_DIR}/fuse/include' Makefile
-./build.sh
-cp libbfs_c.so /usr/lib
-ldconfig
-cd -
+  cd ${BFS_ENV_DIR}
+  git clone https://github.com/apady/bfs.git
+  cd bfs 
+  sed -i '4a FUSE_PATH=${BFS_ENV_DIR}/fuse/include' Makefile
+  ./build.sh
+  cp libbfs_c.so /usr/lib
+  ldconfig
 fi
 
 #BFS-PHP-SDK
 if [[ ! -d ${BFS_ENV_DIR}/bfs-php-extension ]]; then
-git clone https://github.com/apady/bfs-php-extension.git
-cd bfs-php-extension
-chmod 755 build.sh
-./build.sh
-cd -
+  cd ${BFS_ENV_DIR}
+  git clone https://github.com/apady/bfs-php-extension.git
+  cd bfs-php-extension
+  chmod 755 build.sh
+  ./build.sh
 fi
 
 #bfs_mount
 if [[ -z `netstat -ant|grep 8827` ]]; then
-cd  ${BFS_ENV_DIR}/bfs
-if [ ! -d "${BFS_STORAGE_DIR}" ]; then
-mkdir ${BFS_STORAGE_DIR}
-fi
-chown -R apache:apache ${BFS_STORAGE_DIR}
-cd sandbox && ./deploy.sh && ./start_bfs.sh
-cd ../
-sudo -u apache ./bfs_mount ${BFS_STORAGE_DIR}  -c 127.0.0.1:8827 -p /
+  cd  ${BFS_ENV_DIR}/bfs
+  if [ ! -d "${BFS_STORAGE_DIR}" ]; then
+    mkdir ${BFS_STORAGE_DIR}
+  fi
+  chown -R apache:apache ${BFS_STORAGE_DIR}
+  cd sandbox && ./deploy.sh && ./start_bfs.sh
+  cd ../
+  sudo -u apache ./bfs_mount ${BFS_STORAGE_DIR}  -c 127.0.0.1:8827 -p /
 fi
 
 #composer
 if [[ -z `which composer` ]];then
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
+  curl -sS https://getcomposer.org/installer | php
+  mv composer.phar /usr/local/bin/composer
 fi
 
 #mooc-project
@@ -111,27 +110,27 @@ fi
 
 #VHost 
 if [[ ! -f /etc/httpd/conf.d/${serverName}.conf ]]; then
-touch /etc/httpd/conf.d/${serverName}.conf
-echo "<VirtualHost *:80>
-   ServerName ${serverName}
- 
-   ## Vhost docroot
-   DocumentRoot "${ProjectDir}/public"
- 
-   ## Directories, there should at least be a declaration for /var/www/html
- 
-   <Directory "${ProjectDir}/public">
-     Options Indexes FollowSymlinks MultiViews
-     AllowOverride All
-     Require all granted
-     DirectoryIndex index.html
-   </Directory>
- 
-   ## Logging
-   ErrorLog "/var/log/httpd/${serverName}.log"
-   ServerSignature Off
-   CustomLog "/var/log/httpd/${serverName}.log" combined
- </VirtualHost>">/etc/httpd/conf.d/${serverName}.conf
+  touch /etc/httpd/conf.d/${serverName}.conf
+  echo "<VirtualHost *:80>
+  ServerName ${serverName}
+
+  ## Vhost docroot
+  DocumentRoot "${ProjectDir}/public"
+
+  ## Directories, there should at least be a declaration for /var/www/html
+
+  <Directory "${ProjectDir}/public">
+  Options Indexes FollowSymlinks MultiViews
+  AllowOverride All
+  Require all granted
+  DirectoryIndex index.html
+  </Directory>
+
+  ## Logging
+  ErrorLog "/var/log/httpd/${serverName}.log"
+  ServerSignature Off
+  CustomLog "/var/log/httpd/${serverName}.log" combined
+  </VirtualHost>">/etc/httpd/conf.d/${serverName}.conf
 fi
 
 #Firewall
