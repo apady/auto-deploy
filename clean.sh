@@ -14,6 +14,16 @@ DBPassword=`cat config.json| jq -r '.DBPassword'`
 if [ "$1"x = "all"x ]; then
 	rm -rf ${BFS_ENV_DIR}/bfs
 	rm -rf ${BFS_STORAGE_DIR}
+	#Firewall
+	if [ `firewall-cmd --state` == "running" ]; then
+		if [[ -z `firewall-cmd --list-all |grep http|grep https|grep mysql|grep 8827` ]];then
+			firewall-cmd --zone=public --remove-port=80/tcp --permanent
+			firewall-cmd --zone=public --remove-port=443/tcp --permanent
+			firewall-cmd --zone=public --remove-port=3306/tcp --permanent
+			firewall-cmd --zone=public --remove-port=8827/tcp --permanent
+		fi
+		firewall-cmd --reload
+	fi
 	
 fi
 
@@ -30,11 +40,4 @@ else
 	quit"
 fi
 
-#Firewall
-if [ `firewall-cmd --state` == "running" ]; then
-  firewall-cmd --zone=public --remove-port=80/tcp --permanent
-  firewall-cmd --zone=public --remove-port=443/tcp --permanent
-  firewall-cmd --zone=public --remove-port=3306/tcp --permanent
-  firewall-cmd --zone=public --remove-port=8827/tcp --permanent
-  firewall-cmd --reload
-fi
+
