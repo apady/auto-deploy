@@ -91,6 +91,9 @@ def clear_config():
 	if os.path.isfile('./config.json'):
 		os.remove('./config.json')
 
+def repo_install():
+	os.system('bash repo.sh')
+
 def install():
 	
 	uninstall()
@@ -103,6 +106,7 @@ def install():
 	shutil.copy(os.path.join(BASE_DIR,'config.json'), os.path.join(deploy_dir,'config.json'))
 	shutil.copy(os.path.join(BASE_DIR,'setup.py'), os.path.join(deploy_dir,'setup.py'))
 	os.chmod(os.path.join(INSTALL_DIR,'apady_env'),stat.S_IXOTH) 
+	
 
 
 def uninstall():
@@ -129,6 +133,7 @@ if __name__ == '__main__':
 		if not os.path.isfile('./config.json'):
 			config_data=config()
 			store(config_data)
+			repo_install()
 			install()
 			print('Successfully installed.')
 		else:
