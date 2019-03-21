@@ -120,9 +120,11 @@ if __name__ == '__main__':
 	if len(sys.argv) > 1 :
 		if sys.argv[1] == 'install':
 			install()
+			print('Successfully installed.')
 		elif sys.argv[1] == 'uninstall':
 			clear_config()
 			uninstall()
+			print('Successfully uninstalled.')
 	else:
 		if not os.path.isfile('./config.json'):
 			config_data=config()

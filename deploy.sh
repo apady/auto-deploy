@@ -140,12 +140,13 @@ fi
 
 #Firewall
 if [ `firewall-cmd --state` == "running" ]; then
+  echo 'Configuring firewall...'
   firewall-cmd --zone=public --add-port=80/tcp --permanent
   firewall-cmd --zone=public --add-port=443/tcp --permanent
   firewall-cmd --zone=public --add-port=3306/tcp --permanent
   firewall-cmd --zone=public --add-port=8827/tcp --permanent
   firewall-cmd --reload
 fi
-
+echo 'Restarting Apache...'
 systemctl restart httpd
-echo "Done"
+echo 'Done.'
