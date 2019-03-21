@@ -12,24 +12,20 @@ case "$1"x in
     cd ${WORK_DIR}/apady_envd
     bash ./env_install.sh deploy
     bash ./deploy.sh
-    cd -
     ;;
   "repair"x )
     cd ${WORK_DIR}/apady_envd
     bash ./clean.sh 
     bash ./env_install.sh
     bash ./deploy.sh
-    cd -
     ;;
   "clean"x )
     cd ${WORK_DIR}/apady_envd
     bash ./clean.sh all
-    cd -
     ;;
   "config"x )
     cd ${WORK_DIR}/apady_envd
     python setup.py
-    cd -
     ;;
   *)
     echo "
