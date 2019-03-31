@@ -49,6 +49,13 @@ apady_env config
 ```
 apady_env clean
 ```
+
+## Update
+Run the following command to update
+```
+sudo python setup.py update
+```
+
 ## Uninstallation
 
 Run the following command to uninstall

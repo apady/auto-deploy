@@ -122,9 +122,9 @@ def uninstall():
  
 if __name__ == '__main__':
 	if len(sys.argv) > 1 :
-		if sys.argv[1] == 'install':
+		if sys.argv[1] == 'update':
 			install()
-			print('Successfully installed.')
+			print('Successfully updated.')
 		elif sys.argv[1] == 'uninstall':
 			clear_config()
 			uninstall()
