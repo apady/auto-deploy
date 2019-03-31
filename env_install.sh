@@ -23,11 +23,12 @@ fi
 if [ "$1"x == "deploy"x ];then
   yum -y remove php*
   yum -y remove httpd* 
+  yum  --enablerepo=epel -y install nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
+  wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
+  yum -y install yarn
+  #PHP 7.1
+  yum -y --enablerepo=epel install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php71w-gd php71w-pecl-redis
 fi
 
-yum  --enablerepo=epel -y install nodejs wget unzip git svn zlib-devel redis psmisc gcc-c++ autoconf libtool gettext-devel httpd net-tools
-wget https://dl.yarnpkg.com/rpm/yarn.repo -O /etc/yum.repos.d/yarn.repo
-yum -y install yarn
-#PHP 7.1
-yum -y --enablerepo=epel install php71w php71w-devel php71w-mysqlnd php71w-xml php71w-mbstring php71w-gd php71w-pecl-redis
-  
+
+
