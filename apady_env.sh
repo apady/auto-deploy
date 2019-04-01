@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
 WORK_DIR=/usr/bin
-
+if [[ ! -f ${WORK_DIR}/apady_envd/config.json ]]; then
+  echo 'Configuration file does not exit!'
+  exit 1
 
 case "$1"x in
   "deploy"x )
