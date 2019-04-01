@@ -98,7 +98,10 @@ def install():
 	
 	uninstall()
 	os.mkdir(deploy_dir)
-	
+	if not os.path.isfile('./config.json'):
+		if(raw_input("Configuration file does not exist. Try it again? (Y/N):").upper()=='Y'):
+			config_data=config()
+			store(config_data)	
 	shutil.copy(os.path.join(BASE_DIR,'apady_env.sh'), os.path.join(INSTALL_DIR,'apady_env'))
 	shutil.copy(os.path.join(BASE_DIR,'clean.sh'), os.path.join(deploy_dir,'clean.sh'))
 	shutil.copy(os.path.join(BASE_DIR,'env_install.sh'), os.path.join(deploy_dir,'env_install.sh'))
