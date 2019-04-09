@@ -15,7 +15,7 @@
   ;;
   "repair"x )
   cd ${WORK_DIR}/apady_envd
-  bash ./clean.sh 
+  bash ./clean.sh repair
   bash ./env_install.sh
   bash ./deploy.sh
   ;;
