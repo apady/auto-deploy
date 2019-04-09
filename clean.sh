@@ -9,11 +9,7 @@ DBUser=`cat config.json| jq -r '.DBUser'`
 DBPassword=`cat config.json| jq -r '.DBPassword'`
 
 if [ "$1"x = "all"x ]; then
-	if [[ -n `ps -fe|grep bfs_mount|grep -v grep` ]];then
-		umount ${BFS_STORAGE_DIR}
-	fi
 	rm -rf ${BFS_ENV_DIR}/bfs
-	rm -rf ${BFS_STORAGE_DIR}
 	#Firewall
 	if [ `firewall-cmd --state` == "running" ]; then
 		if [[ -z `firewall-cmd --list-all |grep http|grep https|grep mysql|grep 8827` ]];then
@@ -27,6 +23,10 @@ if [ "$1"x = "all"x ]; then
 	
 fi
 
+if [[ -n `ps -fe|grep bfs_mount|grep -v grep` ]];then
+		umount ${BFS_STORAGE_DIR}
+fi
+rm -rf ${BFS_STORAGE_DIR}
 rm -rf ${ProjectDir}
 rm -rf ${BFS_ENV_DIR}/bfs-php-extension
 rm -rf /etc/httpd/conf.d/${serverName}.conf
