@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 # Database
-set -x
 
 if [[ -z `which jq` ]]; then
   yum -y install jq

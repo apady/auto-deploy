@@ -8,17 +8,19 @@ DBName=`cat config.json| jq -r '.DBName'`
 DBUser=`cat config.json| jq -r '.DBUser'`
 DBPassword=`cat config.json| jq -r '.DBPassword'`
 
+echo 'Cleaing...Please wait.'
 if [[ -n `ps -fe|grep bfs_mount|grep -v grep` ]];then
-		umount ${BFS_STORAGE_DIR}
+	umount ${BFS_STORAGE_DIR}
 fi
+
 rm -rf ${BFS_STORAGE_DIR}
+
 if [ "$1"x = "repair"x ]; then
 	cd ${BFS_ENV_DIR}/bfs/sandbox && ./clear.sh
 fi
 
 if [ "$1"x = "all"x ]; then
 	rm -rf ${BFS_ENV_DIR}/bfs
-	#Firewall
 	if [ `firewall-cmd --state` == "running" ]; then
 		if [[ -z `firewall-cmd --list-all |grep http|grep https|grep mysql|grep 8827` ]];then
 			firewall-cmd --zone=public --remove-port=80/tcp --permanent
@@ -28,9 +30,8 @@ if [ "$1"x = "all"x ]; then
 		fi
 		firewall-cmd --reload
 	fi
-	
-fi
 
+fi
 
 rm -rf ${ProjectDir}
 rm -rf ${BFS_ENV_DIR}/bfs-php-extension
