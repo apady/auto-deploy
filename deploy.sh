@@ -69,7 +69,7 @@ if [[ ! -d ${BFS_ENV_DIR}/bfs-php-extension ]]; then
 fi
 
 #bfs_mount
-if [[ -z `netstat -ant|grep 8827` ]]; then
+if [[ -z `ps -fe|grep nameserver|grep -v grep` ]]; then
   cd  ${BFS_ENV_DIR}/bfs
   if [ ! -d "${BFS_STORAGE_DIR}" ]; then
     mkdir ${BFS_STORAGE_DIR}
