@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
+set -x 
 
-
-svnUsername=`cat config.json| jq -r '.svnUsername'`
-svnPassword=`cat config.json| jq -r '.svnPassword'`
-svnRepoURL=`cat config.json| jq -r '.svnRepoURL'`
+# svnUsername=`cat config.json| jq -r '.svnUsername'`
+# svnPassword=`cat config.json| jq -r '.svnPassword'`
+# svnRepoURL=`cat config.json| jq -r '.svnRepoURL'`
 serverName=`cat config.json| jq -r '.serverName'`
 
 BFS_ENV_DIR=`cat config.json| jq -r '.BFS_ENV_DIR'`
@@ -29,10 +29,9 @@ quit"
 
 
 
-#Apache Redis
-systemctl enable httpd
+#Nginx Redis
+systemctl enable nginx
 systemctl enable redis
-systemctl start httpd
 systemctl start redis
 
 #libfuse
@@ -74,10 +73,10 @@ if [[ -z `ps -fe|grep nameserver|grep -v grep` ]]; then
   if [ ! -d "${BFS_STORAGE_DIR}" ]; then
     mkdir ${BFS_STORAGE_DIR}
   fi
-  chown -R apache:apache ${BFS_STORAGE_DIR}
+  chown -R nginx:nginx ${BFS_STORAGE_DIR}
   cd sandbox && ./deploy.sh && ./start_bfs.sh
   cd ../
-  sudo -u apache ./bfs_mount ${BFS_STORAGE_DIR}  -c 127.0.0.1:8827 -p /
+  sudo -u nginx ./bfs_mount ${BFS_STORAGE_DIR}  -c 127.0.0.1:8827 -p /
 fi
 
 #composer
@@ -87,52 +86,77 @@ if [[ -z `which composer` ]];then
 fi
 
 #mooc-project
-if [ ! -d "${ProjectDir}" ]; then
-  mkdir ${ProjectDir}
-  svn co --non-interactive --username ${svnUsername} --password ${svnPassword} ${svnRepoURL} ${ProjectDir}
-  if [ ! -d "${ProjectDir}/.svn" ]; then
+if [ ! -d "${ProjectDir}/cauc-mooc" ]; then
+  cd ${ProjectDir}
+  git clone --depth=1 https://github.com/apady/cauc-mooc.git
+  if [ ! -d "${ProjectDir}/cauc-mooc/.git" ]; then
     echo 'Fail to checkout source code'
-    echo 'Run apady_env config to check SVN parameters'
     exit 1
   fi
-  chmod -R 755 ${ProjectDir}
+  chmod -R 755 ${ProjectDir}/cauc-mooc
   if [[ `getenforce` = "Enforcing" ]];then
     setenforce 0
   fi
-  cd ${ProjectDir}
+  cd ${ProjectDir}/cauc-mooc
   composer install
   yarn install
   $phpcmd bin/console make:migration -n
   $phpcmd bin/console doctrine:schema:drop --force 
   $phpcmd bin/console doctrine:migrations:migrate -n
   yarn encore dev 
-  chown -R apache:apache ${ProjectDir}
-  chown -R apache:apache /var/lib/php/session/ 
+  chown -R nginx:nginx ${ProjectDir}/cauc-mooc
+  chown -R nginx:nginx /var/lib/php/session/ 
 fi
 
+
 #VHost 
-if [[ ! -f /etc/httpd/conf.d/${serverName}.conf ]]; then
-  touch /etc/httpd/conf.d/${serverName}.conf
-  echo "<VirtualHost *:80>
-  ServerName ${serverName}
+if [[ ! -f /etc/nginx/conf.d/${serverName}.conf ]]; then
+  touch /etc/nginx/conf.d/${serverName}.conf
+  echo "server {
+    server_name ${serverName};
+    root ${ProjectDir}/cauc-mooc/public;
+    client_max_body_size 20M;
 
-  ## Vhost docroot
-  DocumentRoot "${ProjectDir}/public"
+    location / {
+        # try to serve file directly, fallback to index.php
+        try_files \$uri /index.php\$is_args\$args;
+    }
 
-  ## Directories, there should at least be a declaration for /var/www/html
+    location ~ ^/index\.php(/|$) {
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
 
-  <Directory "${ProjectDir}/public">
-  Options Indexes FollowSymlinks MultiViews
-  AllowOverride All
-  Require all granted
-  DirectoryIndex index.html
-  </Directory>
+        # optionally set the value of the environment variables used in the application
+        # fastcgi_param APP_ENV prod;
+        # fastcgi_param APP_SECRET <app-secret-id>;
+        fastcgi_param DATABASE_URL "mysql://${DBUser}:${DBPassword}@127.0.0.1:3306/${DBName}";
 
-  ## Logging
-  ErrorLog "/var/log/httpd/${serverName}.log"
-  ServerSignature Off
-  CustomLog "/var/log/httpd/${serverName}.log" combined
-  </VirtualHost>">/etc/httpd/conf.d/${serverName}.conf
+        # When you are using symlinks to link the document root to the
+        # current version of your application, you should pass the real
+        # application path instead of the path to the symlink to PHP
+        # FPM.
+        # Otherwise, PHP's OPcache may not properly detect changes to
+        # your PHP files (see https://github.com/zendtech/ZendOptimizerPlus/issues/126
+        # for more information).
+        fastcgi_param SCRIPT_FILENAME \$realpath_root\$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT \$realpath_root;
+        # Prevents URIs that include the front controller. This will 404:
+        # http://domain.tld/index.php/some-path
+        # Remove the internal directive to allow URIs like this
+        internal;
+    }
+
+    # return 404 for all other php files not matching the front controller
+    # this prevents access to other php files you don't want to be accessible.
+    location ~ \.php$ {
+        return 404;
+    }
+
+    error_log /var/log/nginx/${serverName}_error.log;
+    access_log /var/log/nginx/${serverName}_access.log;
+  }
+  ">/etc/nginx/conf.d/${serverName}.conf
 fi
 
 #Firewall
@@ -153,6 +177,6 @@ if [ `firewall-cmd --state` == "running" ]; then
   firewall-cmd --reload
 fi
 
-echo 'Restarting Apache...'
-systemctl restart httpd
+echo 'Restarting Nginx...'
+systemctl restart nginx
 echo 'Done.'

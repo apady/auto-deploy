@@ -19,16 +19,13 @@ def load():
 
 def config():
 	
-	svnRepoURL =  raw_input("Please input SVN repository URL:")
-	svnUsername =  raw_input("Please input SVN user name:")
-	svnPassword =  getpass.getpass("Please input SVN password:")
 	serverName =  raw_input("Please input server domain name:")
 	DBName =  raw_input("Database name:")
 	DBUser =  raw_input("Database user:")
 	DBPassword =  getpass.getpass("User password for database:")
 	DBRootPassword =  getpass.getpass("Root password for your database:")
-	ProjectDir =  raw_input("Please input project directory path(/var/www/html/apady) :")
-	if not ProjectDir: ProjectDir = "/var/www/html/apady"
+	ProjectDir =  raw_input("Please input project directory path(/var/www/html) :")
+	if not ProjectDir: ProjectDir = "/var/www/html"
 	
 	BFS_ENV_DIR =  raw_input("Directory path for Baidu File System(/home):")
 	if not BFS_ENV_DIR: BFS_ENV_DIR = "/home"
@@ -36,9 +33,7 @@ def config():
 	BFS_STORAGE_DIR =  raw_input("Directory path for BFS storage(/mnt/bfs):")
 	if not BFS_STORAGE_DIR: BFS_STORAGE_DIR = "/mnt/bfs"
 
-	config_data = {"svnUsername":svnUsername,
-	"svnPassword":svnPassword,
-	"svnRepoURL":svnRepoURL,
+	config_data = {
 	"serverName":serverName,
 	"BFS_ENV_DIR":BFS_ENV_DIR,
 	"BFS_STORAGE_DIR":BFS_STORAGE_DIR,
@@ -52,14 +47,14 @@ def reconfig():
 
 	config = load()
 
-	svnRepoURL =  raw_input("Please input SVN repository URL(%s):" % (config['svnRepoURL']))
-	if svnRepoURL:  config['svnRepoURL'] = svnRepoURL 
+	# svnRepoURL =  raw_input("Please input SVN repository URL(%s):" % (config['svnRepoURL']))
+	# if svnRepoURL:  config['svnRepoURL'] = svnRepoURL 
 
-	svnUsername =  raw_input("Please input SVN user name(%s):" % (config['svnUsername']))
-	if svnUsername: config['svnUsername'] = svnUsername 
+	# svnUsername =  raw_input("Please input SVN user name(%s):" % (config['svnUsername']))
+	# if svnUsername: config['svnUsername'] = svnUsername 
 
-	svnPassword =  getpass.getpass("Please input SVN password(%s):" % config['svnPassword'])
-	if svnPassword: config['svnPassword'] = svnPassword
+	# svnPassword =  getpass.getpass("Please input SVN password(%s):" % config['svnPassword'])
+	# if svnPassword: config['svnPassword'] = svnPassword
 
 	serverName =  raw_input("Please input server domain name(%s):" % (config['serverName']))
 	if serverName: config['serverName'] = serverName 

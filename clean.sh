@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+set -x 
 
 BFS_ENV_DIR=`cat config.json| jq -r '.BFS_ENV_DIR'`
 BFS_STORAGE_DIR=`cat config.json| jq -r '.BFS_STORAGE_DIR'`
@@ -7,6 +7,7 @@ ProjectDir=`cat config.json| jq -r '.ProjectDir'`
 DBName=`cat config.json| jq -r '.DBName'`
 DBUser=`cat config.json| jq -r '.DBUser'`
 DBPassword=`cat config.json| jq -r '.DBPassword'`
+serverName=`cat config.json| jq -r '.serverName'`
 
 echo 'Cleaing...Please wait.'
 if [[ -n `ps -fe|grep bfs_mount|grep -v grep` ]];then
@@ -33,9 +34,9 @@ if [ "$1"x = "all"x ]; then
 
 fi
 
-rm -rf ${ProjectDir}
+rm -rf ${ProjectDir}/cauc-mooc
 rm -rf ${BFS_ENV_DIR}/bfs-php-extension
-rm -rf /etc/httpd/conf.d/${serverName}.conf
+rm -rf /etc/nginx/conf.d/${serverName}.conf
 
 if [ -z "${DBUser}" ] || [ -z "${DBName}" ] || [ -z "${DBPassword}" ];then
 	echo "Please fill in Database parameters in config.json"
