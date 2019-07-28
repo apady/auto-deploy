@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
-set -x 
-
-# svnUsername=`cat config.json| jq -r '.svnUsername'`
-# svnPassword=`cat config.json| jq -r '.svnPassword'`
-# svnRepoURL=`cat config.json| jq -r '.svnRepoURL'`
+set -x
 serverName=`cat config.json| jq -r '.serverName'`
 
 BFS_ENV_DIR=`cat config.json| jq -r '.BFS_ENV_DIR'`
@@ -94,7 +90,7 @@ if [ ! -d "${ProjectDir}/cauc-mooc" ]; then
     exit 1
   fi
   chmod -R 755 ${ProjectDir}/cauc-mooc
-  if [[ `getenforce` = "Enforcing" ]];then
+  if [[ `getenforce` == "Enforcing" ]];then
     setenforce 0
   fi
   cd ${ProjectDir}/cauc-mooc
@@ -179,4 +175,5 @@ fi
 
 echo 'Restarting Nginx...'
 systemctl restart nginx
+systemctl restart php-fpm
 echo 'Done.'

@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-set -x 
-
+set -x
 BFS_ENV_DIR=`cat config.json| jq -r '.BFS_ENV_DIR'`
 BFS_STORAGE_DIR=`cat config.json| jq -r '.BFS_STORAGE_DIR'`
 ProjectDir=`cat config.json| jq -r '.ProjectDir'`

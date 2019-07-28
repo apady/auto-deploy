@@ -47,15 +47,6 @@ def reconfig():
 
 	config = load()
 
-	# svnRepoURL =  raw_input("Please input SVN repository URL(%s):" % (config['svnRepoURL']))
-	# if svnRepoURL:  config['svnRepoURL'] = svnRepoURL 
-
-	# svnUsername =  raw_input("Please input SVN user name(%s):" % (config['svnUsername']))
-	# if svnUsername: config['svnUsername'] = svnUsername 
-
-	# svnPassword =  getpass.getpass("Please input SVN password(%s):" % config['svnPassword'])
-	# if svnPassword: config['svnPassword'] = svnPassword
-
 	serverName =  raw_input("Please input server domain name(%s):" % (config['serverName']))
 	if serverName: config['serverName'] = serverName 
 
