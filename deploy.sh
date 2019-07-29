@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -x
+
 serverName=`cat config.json| jq -r '.serverName'`
 
 BFS_ENV_DIR=`cat config.json| jq -r '.BFS_ENV_DIR'`
